@@ -1,18 +1,15 @@
 pipeline {
-    agent{
-        node{
-            label 'master'
-        }
+  agent { docker { image 'python:3.11.5' } }
+  stages {
+    stage('build') {
+      steps {
+        sh 'pip install -r requirements.txt'
+      }
     }
-    stages{
-        stage('Initialize'){
-            steps{
-                script{
-                    def dockerHome = tool 'myDocker'
-                    env.PATH = "${dockerHome}"/bin:${env.PATH}"
-                }
-            }
-        }
+    stage('test') {
+      steps {
+        sh 'pytest -s Test1.py'
+      }
     }
-
+  }
 }
